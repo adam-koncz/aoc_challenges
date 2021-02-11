@@ -1,0 +1,107 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+
+@adam-koncz
+JetBrains
+/
+kotlin
+1.4k
+35.2k
+4.4k
+Code
+Pull requests
+145
+Actions
+Security
+Insights
+kotlin/.gitignore
+
+Aleksei Cherepanov JPS. Suppress "Add new files to git" during portable artifacts extrac…
+…
+Latest commit c64c319 on Sep 14, 2020
+ History
+ 23 contributors
+@4u7@snrostov@yanex@shafirov@shalupov@ilgonmic@ligee@bashor@ilya-g@abreslav@AlexeyTsvetkov@udalov
+64 lines (64 sloc)  1.53 KB
+
+.DS_Store
+.idea/shelf
+/confluence/target
+/dependencies/repo
+/android.tests.dependencies
+/dependencies/android.tests.dependencies
+/dist
+/local
+/gh-pages
+/ideaSDK
+/clionSDK
+/android-studio/sdk
+out/
+/tmp
+workspace.xml
+*.versionsBackup
+/idea/testData/debugger/tinyApp/classes*
+/jps-plugin/testData/kannotator
+/js/js.translator/testData/out/
+/js/js.translator/testData/out-min/
+/js/js.translator/testData/out-pir/
+.gradle/
+build/
+!**/src/**/build
+!**/test/**/build
+*.iml
+!**/testData/**/*.iml
+.idea/libraries/Gradle*.xml
+.idea/libraries/Maven*.xml
+.idea/artifacts/PILL_*.xml
+.idea/artifacts/KotlinPlugin.xml
+.idea/modules
+.idea/runConfigurations/JPS_*.xml
+.idea/runConfigurations/PILL_*.xml
+.idea/libraries
+.idea/modules.xml
+.idea/gradle.xml
+.idea/compiler.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/.name
+.idea/artifacts/dist_auto_*
+.idea/artifacts/dist.xml
+.idea/artifacts/ideaPlugin.xml
+.idea/artifacts/kotlinc.xml
+.idea/artifacts/kotlin_compiler_jar.xml
+.idea/artifacts/kotlin_plugin_jar.xml
+.idea/artifacts/kotlin_jps_plugin_jar.xml
+.idea/artifacts/kotlin_daemon_client_jar.xml
+.idea/artifacts/kotlin_imports_dumper_compiler_plugin_jar.xml
+.idea/artifacts/kotlin_main_kts_jar.xml
+.idea/artifacts/kotlin_compiler_client_embeddable_jar.xml
+.idea/artifacts/kotlin_reflect_jar.xml
+.idea/artifacts/kotlin_stdlib_js_ir_*
+.idea/artifacts/kotlin_test_js_ir_*
+.idea/artifacts/kotlin_stdlib_wasm_*
+.idea/jarRepositories.
+kotlin-ultimate/
+node_modules/
+.rpt2_cache/
+libraries/tools/kotlin-test-js-runner/lib/
+local.properties
+buildSrcTmp/
+distTmp/
+outTmp/
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
