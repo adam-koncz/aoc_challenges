@@ -5,6 +5,7 @@ import java.io.FileInputStream
 import java.util.*
 
 private const val SHINY_GOLD = "shiny gold"
+private const val CHALLENGE_INPUT_FILE = "resources/day7/challenge1.txt"
 
 fun main() {
     solveFirstHalfOfTheChallenge()
@@ -14,7 +15,7 @@ fun main() {
 
 
 private fun solveFirstHalfOfTheChallenge() {
-    val scanner = Scanner(FileInputStream(File("resources/day7/challenge1.txt")))
+    val scanner = Scanner(FileInputStream(File(CHALLENGE_INPUT_FILE)))
     val bags = mutableListOf<Bag>()
 
     readBagsDataFromScanner(scanner, bags)
@@ -24,11 +25,10 @@ private fun solveFirstHalfOfTheChallenge() {
 }
 
 private fun solveSecondHalfOfTheChallenge() {
-    val scanner = Scanner(FileInputStream(File("resources/day7/challenge1.txt")))
+    val scanner = Scanner(FileInputStream(File(CHALLENGE_INPUT_FILE)))
     val bags = mutableListOf<Bag>()
 
     readBagsDataFromScanner(scanner, bags)
-
 
     val requiredBagsInsideBagForBagName = getTotalNumberOfBagsPresentForRootBag(bags.first { it.name == SHINY_GOLD }) - 1
     println("The solution for the second half of the challenge: " + requiredBagsInsideBagForBagName)
@@ -96,7 +96,7 @@ fun getValidOuterBagsForCarryingShinyGoldBags(bags: MutableList<Bag>): Set<Bag> 
         .forEach {
             val reachableBags = mutableSetOf<Bag>()
             reachableBags.add(it)
-            addAllReachableBagsToResult(reachableBags, it.containableBags.keys)
+            addAllReachableBagsRecursively(reachableBags, it.containableBags.keys)
             if (reachableBags.any { it.name == SHINY_GOLD }) {
                 result.add(it)
             }
@@ -104,11 +104,11 @@ fun getValidOuterBagsForCarryingShinyGoldBags(bags: MutableList<Bag>): Set<Bag> 
     return result
 }
 
-fun addAllReachableBagsToResult(result: MutableSet<Bag>, containableBags: Set<Bag>) {
+fun addAllReachableBagsRecursively(result: MutableSet<Bag>, containableBags: Set<Bag>) {
     containableBags.forEach {
         if (!result.contains(it)) {
             result.add(it)
-            addAllReachableBagsToResult(result, it.containableBags.keys)
+            addAllReachableBagsRecursively(result, it.containableBags.keys)
         }
     }
 }
