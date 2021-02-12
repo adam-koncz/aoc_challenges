@@ -8,6 +8,8 @@ private const val SHINY_GOLD = "shiny gold"
 
 fun main() {
     solveFirstHalfOfTheChallenge()
+
+    solveSecondHalfOfTheChallenge()
 }
 
 
@@ -20,6 +22,18 @@ private fun solveFirstHalfOfTheChallenge() {
     val validOuterBagsForCarryingShinyGoldBags = getValidOuterBagsForCarryingShinyGoldBags(bags)
     println("The solution for the first half of the challenge: " + validOuterBagsForCarryingShinyGoldBags.size)
 }
+
+private fun solveSecondHalfOfTheChallenge() {
+    val scanner = Scanner(FileInputStream(File("resources/day7/challenge1.txt")))
+    val bags = mutableListOf<Bag>()
+
+    readBagsDataFromScanner(scanner, bags)
+
+
+    val requiredBagsInsideBagForBagName = getTotalNumberOfBagsPresentForRootBag(bags.first { it.name == SHINY_GOLD }) - 1
+    println("The solution for the second half of the challenge: " + requiredBagsInsideBagForBagName)
+}
+
 
 data class Bag (
     val name: String,
@@ -97,4 +111,10 @@ fun addAllReachableBagsToResult(result: MutableSet<Bag>, containableBags: Set<Ba
             addAllReachableBagsToResult(result, it.containableBags.keys)
         }
     }
+}
+fun getTotalNumberOfBagsPresentForRootBag(rootBag: Bag): Int {
+    if (rootBag.containableBags.isEmpty()) {
+        return 1
+    }
+    return 1 + rootBag.containableBags.map { it.value * getTotalNumberOfBagsPresentForRootBag(it.key)}.sum()
 }
