@@ -7,39 +7,43 @@ import java.util.*
 private const val SHINY_GOLD = "shiny gold"
 
 fun main() {
+    solveFirstHalfOfTheChallenge()
+}
+
+
+private fun solveFirstHalfOfTheChallenge() {
     val scanner = Scanner(FileInputStream(File("resources/day7/challenge1.txt")))
     val bags = mutableListOf<Bag>()
 
-    while (scanner.hasNext()) {
-
-        val bagNames = getBagNamesFromLine(scanner.nextLine())
-        val bagToAddContainableBags = bags.createAndAddOrFindBagInCollectionByName(bagNames[0])
-
-        val containableBags = bagNames
-            .drop(1)
-            .map { bags.createAndAddOrFindBagInCollectionByName(it) }
-
-        bagToAddContainableBags.containableBags = containableBags
-
-    }
+    readBagsDataFromScanner(scanner, bags)
 
     val validOuterBagsForCarryingShinyGoldBags = getValidOuterBagsForCarryingShinyGoldBags(bags)
-//    bags.forEach { println(it) }
-//    println(bags.size)
-
-    println(validOuterBagsForCarryingShinyGoldBags.size)
+    println("The solution for the first half of the challenge: " + validOuterBagsForCarryingShinyGoldBags.size)
 }
-
 
 data class Bag (
     val name: String,
 
-    var containableBags: List<Bag> = listOf()
+    val containableBags: MutableMap<Bag, Int> = mutableMapOf()
 ) {
     override fun toString(): String {
-        return "Bag(name=$name, containableBags=${containableBags.map { it.name }})"
+        return "Bag(name=$name, containableBags=${containableBags.map { "${it.key.name}=${it.value}" }})"
     }
 }
+private fun readBagsDataFromScanner(scanner: Scanner, bags: MutableList<Bag>) {
+    while (scanner.hasNext()) {
+
+        val words = scanner.nextLine().split(" ")
+        val bagToAddContainableBagsName = "${words[0]} ${words[1]}"
+        val bagToAddContainableBags: Bag = bags.createAndAddOrFindBagInCollectionByName(bagToAddContainableBagsName)
+
+        val containableBagsMap = getContainableBagsMapFromWords(words.drop(4), bags)
+        bagToAddContainableBags.containableBags.plusAssign(containableBagsMap)
+
+    }
+    scanner.close()
+}
+
 
 fun MutableCollection<Bag>.createAndAddOrFindBagInCollectionByName(name: String): Bag {
     val bagInTheCollection = this.find { it.name == name }
@@ -51,25 +55,25 @@ fun MutableCollection<Bag>.createAndAddOrFindBagInCollectionByName(name: String)
     return bagInTheCollection
 }
 
-fun getBagNamesFromLine(line: String): List<String> {
-    val result = mutableListOf<String>()
-    val words = line.split(" ")
-    val firstBagName = "${words[0]} ${words[1]}"
-    result.add(firstBagName)
-    if (line.contains("no")) {
-        return result
+fun getContainableBagsMapFromWords(words: List<String>, bags: MutableCollection<Bag>): Map<Bag, Int> {
+    if (words.any { it == "no" }) {
+        return emptyMap()
     }
 
-    val firstContainableBagName = "${words[5]} ${words[6]}"
-    result.add(firstContainableBagName)
+    val result = mutableMapOf<Bag, Int>()
 
-    val numberOfContainableBags = line.count { it == ',' } + 1
+    val firstContainableBag = bags.createAndAddOrFindBagInCollectionByName("${words[1]} ${words[2]}")
+    result.plusAssign(firstContainableBag to words[0].toInt())
+    val numberOfContainableBags = words.size / 4
+
     for (i in 0..numberOfContainableBags - 2) {
-        val containableBagName = "${words[9 + i * 4]} ${words[10 + i * 4]}"
-        result.add(containableBagName)
+        val containableBag = bags.createAndAddOrFindBagInCollectionByName("${words[5 + i * 4]} ${words[6 + i * 4]}")
+        result.plusAssign(containableBag to words[4 + i * 4].toInt())
     }
+
     return result
 }
+
 fun getValidOuterBagsForCarryingShinyGoldBags(bags: MutableList<Bag>): Set<Bag> {
     val result = mutableSetOf<Bag>()
 
@@ -78,21 +82,19 @@ fun getValidOuterBagsForCarryingShinyGoldBags(bags: MutableList<Bag>): Set<Bag> 
         .forEach {
             val reachableBags = mutableSetOf<Bag>()
             reachableBags.add(it)
-            addAllReachableBagsToResult(reachableBags, it.containableBags)
-            if (reachableBags.any { it.name == "shiny gold" }) {
+            addAllReachableBagsToResult(reachableBags, it.containableBags.keys)
+            if (reachableBags.any { it.name == SHINY_GOLD }) {
                 result.add(it)
-                return@forEach
             }
         }
-
     return result
 }
 
-fun addAllReachableBagsToResult(result: MutableSet<Bag>, containableBags: List<Bag>) {
+fun addAllReachableBagsToResult(result: MutableSet<Bag>, containableBags: Set<Bag>) {
     containableBags.forEach {
         if (!result.contains(it)) {
             result.add(it)
-            addAllReachableBagsToResult(result, it.containableBags)
+            addAllReachableBagsToResult(result, it.containableBags.keys)
         }
     }
 }
